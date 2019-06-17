@@ -10,14 +10,25 @@ This project is intended to provide a user the ability to track their JobCoin tr
 ```bash
 npm install 
 ```
-
-2) start-up script 
+2) build dist file
+```bash
+npm run build
+```
+3) start-up script 
 ```bash
 npm run dev
 ```
 
 ## features
-* Sign in widget that allows registered users to sign in, without a password
+* Sign in widget that allows registered users to sign in, without a password. Users are created and given tokens using the Job Coin Management tool: 
+[https://jobcoin.gemini.com/endurance](https://jobcoin.gemini.com/endurance) 
+Test Users include 
+* Alice
+* Bob
+* Jenny
+* John
+* Mat
+* Justin
 <br/>
 <img src="./src/assets/readmeScreenShots/log_in.png" width="400"/>
 
