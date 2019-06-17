@@ -21,7 +21,6 @@ npm run dev
 <br/>
 <img src="./src/assets/readmeScreenShots/log_in.png" width="400"/>
 
-
 * A sign out button that clears information related to previously logged in user from the store. 
 <br/>
 <img src="./src/assets/readmeScreenShots/user_log_out.png " width="200"/>
@@ -37,7 +36,6 @@ npm run dev
 * Transaction widget through transactions are pushed using the JobCoin API. Availabe Users are listed, and transactions are sent if the amount is below the balance and the user is valid. 
 <br/>
 <img src="./src/assets/readmeScreenShots/transact.png" width="300"/>
-
 
 
 ## Tech/Framework used
@@ -66,7 +64,6 @@ There is one major limitation with the Reaction library is its use with d3. D3's
 
 I have used d3 many times, and each time I feel like the methods used are confusing. While I still use d3 scales, I prefer to use svg and react. React gives you all the rendering power you would need for dynamic visualizations, and you can bring in d3 functionality as needed on top. 
 
-
-
-
+## future improvements
+The scaling feature appears to push new transaction paths upward beyond the scope of the SVG for some unknown reason when the user's currrent balance is near their higest balance. I didn't have time to figure what the issue was. It is likely something to do with the scaling of the graph being throw off when the number being scaled is beyond the scaling scope. 
 
