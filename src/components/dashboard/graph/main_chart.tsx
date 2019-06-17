@@ -18,18 +18,31 @@ const MainChart = (props: iProps): JSX.Element => {
   const ref = useRef(null);
   const { xTimeScale, yTransScale } = props.scales;
 
+
+ 
+
   useEffect(() => {
-    //all transactions
+    buildAxis();
+  }, []);
+
+  useEffect(() => {
     const lineDataParser = buildLineDataParser();
+    //all transactions
     const parsedPathData = lineDataParser(state.currentUserTransactions);
     setparsedPathData(parsedPathData);
     //all transactions curved
     const curvedlineDataParser = buildLineDataParserCurved();
-    const _parsedCurvedPathData = curvedlineDataParser(state.currentUserTransactions);
+    const _parsedCurvedPathData = curvedlineDataParser(
+      state.currentUserTransactions
+    );
     setparsedCurvedPathData(_parsedCurvedPathData);
     //new transactions
     const parsedPathData_NewTrans = lineDataParser(state.newTransactions);
     setparsedPathData_NewTrans(parsedPathData_NewTrans);
+  }, [state.newTransactions]);
+
+  useEffect(() => {
+    const lineDataParser = buildLineDataParser();
     //mouse over transactions
     const Last2TransMousedOver = trackLastTransaction();
     const _parsedPathLast2Trans = lineDataParser(Last2TransMousedOver);
@@ -37,7 +50,8 @@ const MainChart = (props: iProps): JSX.Element => {
     //color transHover
     if (typeof Last2TransMousedOver[1] != "undefined") {
       const transAmountDiff =
-        Last2TransMousedOver[1].sumForUser - Last2TransMousedOver[0].sumForUser;
+        Last2TransMousedOver[1].sumForUser -
+        Last2TransMousedOver[0].sumForUser;
       if (transAmountDiff < 0) {
         props.sethoveredTransDirection("down");
       } else if (transAmountDiff > 0) {
@@ -49,9 +63,6 @@ const MainChart = (props: iProps): JSX.Element => {
     };
   }, [mouseX]);
 
-  useEffect(() => {
-    buildAxis();
-  }, []);
 
   const buildLineDataParser = () => {
     const lineDataParser = d3

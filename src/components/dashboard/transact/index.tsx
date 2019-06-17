@@ -36,15 +36,6 @@ const Transact = (props: iProps): JSX.Element => {
     receivingJCoinAddr: string,
     amount2Send: string
   ): void => {
-    console.log(
-      "fromAddress",
-      fromAddress,
-      "toAddress",
-      receivingJCoinAddr,
-      "amount",
-      amount2Send
-    );
-
     const URL = "https://jobcoin.gemini.com/endurance/api/transactions";
     fetch(URL, {
       method: "post",

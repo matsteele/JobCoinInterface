@@ -16,7 +16,7 @@ npm install
 npm run dev
 ```
 
-## Features
+## features
 * Sign in widget that allows registered users to sign in, without a password
 <br/>
 <img src="./src/assets/readmeScreenShots/log_in.png" width="400"/>
@@ -34,8 +34,7 @@ npm run dev
 <br/>
 <img src="./src/assets/readmeScreenShots/graph.png" width="450"/>
 
-* Transaction Window
-Transactions are linked up to the JobCoin API. Availabe Users are listed, and transactions are sent if the amount is below the balance and the user is valid. 
+* Transaction widget through transactions are pushed using the JobCoin API. Availabe Users are listed, and transactions are sent if the amount is below the balance and the user is valid. 
 <br/>
 <img src="./src/assets/readmeScreenShots/transact.png" width="300"/>
 
