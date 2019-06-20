@@ -61,6 +61,9 @@ const LogIn = (): JSX.Element => {
       });
     }
   });
+  const dropdownOptions = state.allUsers.map((user: string) => (
+    <option key={user} value={user} />
+  ));
 
   return (
     <Section>
@@ -68,7 +71,9 @@ const LogIn = (): JSX.Element => {
         dashboard={false}
         scale={100}
         backgroundColor={ifWriting ? styleUtils.basicGray : "white"}
-        emphasisColor={ifWriting ? styleUtils.darkGray : styleUtils.emphasisRed}
+        emphasisColor={
+          ifWriting ? styleUtils.darkGray : styleUtils.emphasisRed
+        }
       />
       <LogInForm
         backgroundColor={ifWriting ? styleUtils.basicGray : "white"}
@@ -81,6 +86,8 @@ const LogIn = (): JSX.Element => {
           handleChange={handleChange}
           ifWriting={ifWriting}
           handleSubmit={handleSubmit}
+          list={"addresses"}
+          options={dropdownOptions}
           iconName={"sign-in"}
           placeholderText={"jobcoin address..."}
         />

@@ -8,15 +8,18 @@ export const sumToDate = (
   const getSum = (total: number, transaction: i.Transactions): number => {
     const convertedtimestamp = Date.parse(transaction.timestamp);
     const convertedAmount = parseFloat(transaction.amount);
-    if (convertedtimestamp < timestamp) {
+    if (convertedtimestamp <= timestamp) {
       if (
         transaction.fromAddress === person &&
         transaction.toAddress != person
       ) {
         return total - convertedAmount;
-      } else if (transaction.toAddress === person) {
-        return total + convertedAmount;
-      }
+      } else if (
+               transaction.toAddress === person &&
+               transaction.fromAddress != person
+             ) {
+               return total + convertedAmount;
+             }
     }
     return total;
   };
@@ -35,7 +38,6 @@ export const sumAndSortTransactions = (
     );
   });
 
-  //move to helper file
   const addSumToEachTransactionByPerson = transaction => {
     const balanceAtTransactTime = sumToDate(
       Date.parse(transaction.timestamp),
@@ -52,7 +54,7 @@ export const sumAndSortTransactions = (
   );
   return transactionsWithSumData;
 };
-// a little hacky...
+
 export const filterByDate = (
   timestamp: number,
   transArray: i.Transactions[]

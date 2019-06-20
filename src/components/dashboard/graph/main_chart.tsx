@@ -10,16 +10,14 @@ const MainChart = (props: iProps): JSX.Element => {
   const { state } = useContext(Store);
   const [parsedPathData, setparsedPathData] = useState<any>("");
   const [parsedCurvedPathData, setparsedCurvedPathData] = useState<any>("");
-  const [parsedPathData_NewTrans, setparsedPathData_NewTrans] = useState<any>("");
+  const [parsedPathData_NewTrans, setparsedPathData_NewTrans] = useState<any>(
+    ""
+  );
   const [parsedPathLast2Trans, setparsedPathLast2Trans] = useState<any>("");
   const [mouseX, setmouseX] = useState(0);
   const [IsScaleBuilt, setIsScaleBuilt] = useState(false);
 
   const ref = useRef(null);
-  const { xTimeScale, yTransScale } = props.scales;
-
-
- 
 
   useEffect(() => {
     buildAxis();
@@ -31,7 +29,9 @@ const MainChart = (props: iProps): JSX.Element => {
     const parsedPathData = lineDataParser(state.currentUserTransactions);
     setparsedPathData(parsedPathData);
     //all transactions curved
-    const curvedlineDataParser = buildLineDataParserCurved();
+    const curvedlineDataParser = buildLineDataParser().curve(
+      d3.curveCatmullRom
+    );
     const _parsedCurvedPathData = curvedlineDataParser(
       state.currentUserTransactions
     );
@@ -39,19 +39,21 @@ const MainChart = (props: iProps): JSX.Element => {
     //new transactions
     const parsedPathData_NewTrans = lineDataParser(state.newTransactions);
     setparsedPathData_NewTrans(parsedPathData_NewTrans);
+    return () => {
+      setparsedPathLast2Trans("");
+    };
   }, [state.newTransactions]);
 
   useEffect(() => {
     const lineDataParser = buildLineDataParser();
     //mouse over transactions
-    const Last2TransMousedOver = trackLastTransaction();
+    const Last2TransMousedOver = trackLasteTransactionsMousedOver();
     const _parsedPathLast2Trans = lineDataParser(Last2TransMousedOver);
     setparsedPathLast2Trans(_parsedPathLast2Trans);
     //color transHover
     if (typeof Last2TransMousedOver[1] != "undefined") {
       const transAmountDiff =
-        Last2TransMousedOver[1].sumForUser -
-        Last2TransMousedOver[0].sumForUser;
+        Last2TransMousedOver[1].sumForUser - Last2TransMousedOver[0].sumForUser;
       if (transAmountDiff < 0) {
         props.sethoveredTransDirection("down");
       } else if (transAmountDiff > 0) {
@@ -63,8 +65,8 @@ const MainChart = (props: iProps): JSX.Element => {
     };
   }, [mouseX]);
 
-
   const buildLineDataParser = () => {
+    const { xTimeScale, yTransScale } = props.scales;
     const lineDataParser = d3
       .line()
       .x(d => {
@@ -76,20 +78,8 @@ const MainChart = (props: iProps): JSX.Element => {
     return lineDataParser;
   };
 
-  const buildLineDataParserCurved = () => {
-    const lineDataParser = d3
-      .line()
-      .x(d => {
-        return xTimeScale(new Date(d.timestamp));
-      })
-      .y(d => {
-        return yTransScale(parseFloat(d.sumForUser));
-      })
-      .curve(d3.curveCatmullRom);
-    return lineDataParser;
-  };
-
   const buildAxis = () => {
+    const { yTransScale } = props.scales;
     if (IsScaleBuilt === false) {
       var axis = d3.axisRight(yTransScale);
       const svg = d3.select(ref.current);
@@ -118,13 +108,16 @@ const MainChart = (props: iProps): JSX.Element => {
     updateMouseCoordinatesForAxisDisplay();
   };
 
-  const trackLastTransaction = () => {
+  const trackLasteTransactionsMousedOver = () => {
+    const { xTimeScale } = props.scales;
     const dateRef = xTimeScale.invert(mouseX);
     const TransactionsToDate = filterByDate(
       dateRef,
       state.currentUserTransactions
     );
-    const lastTwoTransactionsToDate = TransactionsToDate.slice(TransactionsToDate.length - 2);
+    const lastTwoTransactionsToDate = TransactionsToDate.slice(
+      TransactionsToDate.length - 2
+    );
     return lastTwoTransactionsToDate;
   };
 
@@ -213,7 +206,8 @@ const SVGwithOverflow: any = styled.svg`
 const StyledPath: any = styled.path(
   {
     fill: "none",
-    strokeWidth: 5
+    strokeWidth: 5,
+    strokeLinejoin: "round"
   },
   props => ({
     stroke: props.color
@@ -229,9 +223,9 @@ interface iProps {
   transactionData: i.Transactions[];
   svgWidth: number;
   svgHeight: number;
-  focusIsOnGraph:boolean;
-  sethoveredTransDirection(direction:string):void;
-  setFocusIsOnGraph(bool:boolean):void;
+  focusIsOnGraph: boolean;
+  sethoveredTransDirection(direction: string): void;
+  setFocusIsOnGraph(bool: boolean): void;
   logMouseMovements(xyCoordsOfMouseOnHover: number[]): void;
   xyCoordsOfMouseOnHover: number;
   scales: i.Scales;

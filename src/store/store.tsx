@@ -43,6 +43,7 @@ export const reducer = (state: i.State, action: iAction): iState => {
 
 export const StoreProvider = (props: any): JSX.Element => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
+  window.state = state 
   return (
     <Store.Provider value={{ state, dispatch }}>
       {props.children}
